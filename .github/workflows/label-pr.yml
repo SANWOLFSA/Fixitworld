@@ -1,0 +1,16 @@
+---
+name: Professionalize site
+
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  label:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Add PR label
+        uses: actions-ecosystem/action-add-labels@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          labels: professionalize-site
