@@ -1,0 +1,118 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                String   @id @default(cuid())
+  email             String   @unique
+  password          String
+  country           String
+  emailVerified     Boolean  @default(false)
+  ficaVerified      Boolean  @default(false)
+  ficaId            String?
+  isPremium         Boolean  @default(false)
+  premiumExpiresAt  DateTime?
+  listings          Listing[]
+  orders            Order[]
+  reviews           Review[]
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
+
+model Listing {
+  id              String   @id @default(cuid())
+  title           String
+  description     String   @db.Text
+  category        String   // TV, Fridge, Heater, Stove, etc.
+  brand           String
+  size            String
+  price           Int      // in cents for currency flexibility
+  images          String[] @default([])
+  condition       String   @default("USED") // USED, REFURBISHED, NEW
+  status          String   @default("ACTIVE") // ACTIVE, SOLD, DELISTED
+  seller          User     @relation(fields: [sellerId], references: [id], onDelete: Cascade)
+  sellerId        String
+  orders          Order[]
+  reviews         Review[]
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model Order {
+  id              String   @id @default(cuid())
+  listing         Listing  @relation(fields: [listingId], references: [id])
+  listingId       String
+  buyer           User     @relation(fields: [buyerId], references: [id])
+  buyerId         String
+  amount          Int
+  status          String   @default("PENDING") // PENDING, PAID, COMPLETED, CANCELLED
+  paymentMethod   String   // CARD, BANK_TRANSFER
+  stripePaymentId String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model Review {
+  id              String   @id @default(cuid())
+  listing         Listing  @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  listingId       String
+  reviewer        User     @relation(fields: [reviewerId], references: [id])
+  reviewerId      String
+  rating          Int      // 1-5
+  comment         String   @db.Text
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model Tutorial {
+  id              String   @id @default(cuid())
+  title           String
+  description     String   @db.Text
+  category        String   // TV, Fridge, Heater, Stove, etc.
+  difficulty      String   @default("BEGINNER") // BEGINNER, INTERMEDIATE, ADVANCED
+  estimatedTime   Int      // in minutes
+  videoUrl        String?
+  thumbnail       String?
+  steps           TutorialStep[]
+  tools           TutorialTool[]
+  premiumOnly     Boolean  @default(false)
+  published       Boolean  @default(false)
+  viewCount       Int      @default(0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model TutorialStep {
+  id              String   @id @default(cuid())
+  tutorial        Tutorial @relation(fields: [tutorialId], references: [id], onDelete: Cascade)
+  tutorialId      String
+  stepNumber      Int
+  title           String
+  description     String   @db.Text
+  imageUrl        String?
+  order           Int
+  createdAt       DateTime @default(now())
+}
+
+model TutorialTool {
+  id              String   @id @default(cuid())
+  tutorial        Tutorial @relation(fields: [tutorialId], references: [id], onDelete: Cascade)
+  tutorialId      String
+  name            String
+  description     String?
+  createdAt       DateTime @default(now())
+}
+
+model Admin {
+  id              String   @id @default(cuid())
+  email           String   @unique
+  password        String
+  role            String   @default("MODERATOR") // ADMIN, MODERATOR, ANALYST
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
