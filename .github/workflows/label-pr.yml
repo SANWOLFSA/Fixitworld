@@ -4,6 +4,9 @@ name: Professionalize site
 on:
   pull_request:
     branches: [ main ]
+    
+permissions:
+  pull-requests: write
 
 jobs:
   label:
