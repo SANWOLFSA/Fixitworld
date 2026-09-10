@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FixItGlobal & Market</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans min-h-screen flex flex-col">
+
+    <!-- Header -->
+    <header class="bg-blue-600 text-white p-4 shadow-md sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto flex justify-between items-center">
+            <h1 class="text-xl font-bold tracking-tight">🌍 FixItGlobal & Market</h1>
+            <nav class="space-x-4 text-sm">
+                <button onclick="switchTab('auth-section')" class="hover:underline">Account</button>
+                <button onclick="switchTab('marketplace-section')" class="hover:underline">Marketplace</button>
+                <button onclick="switchTab('diy-section')" class="hover:underline">DIY Tutorials</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto p-4 flex-grow w-full">
+
+        <!-- Premium Banner -->
+        <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-6 rounded shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
+            <div>
+                <p class="font-bold">🚀 Lifetime Access Premium Offer</p>
+                <p class="text-sm">Pay a simple, <b>once-off subscription fee</b> to unlock infinite DIY repair tutorials for every electronic device!</p>
+            </div>
+            <button onclick="alert('Payment simulation: Infinite tutorials unlocked! 🎉')" class="bg-yellow-600 text-white px-4 py-2 rounded text-sm font-semibold hover:bg-yellow-700 transition whitespace-nowrap">Unlock for Life</button>
+        </div>
+
+        <!-- SECTION 1: AUTH -->
+        <section id="auth-section" class="tab-content max-w-md mx-auto bg-white p-6 rounded-lg shadow-md my-8">
+            <div class="flex justify-center space-x-6 mb-6 border-b pb-3">
+                <button id="signup-toggle" onclick="toggleAuthMode('signup')" class="text-lg font-bold text-blue-600 border-b-2 border-blue-600 pb-1">Sign Up</button>
+                <button id="login-toggle" onclick="toggleAuthMode('login')" class="text-lg font-bold text-gray-400 pb-1">Log In</button>
+            </div>
+            <h3 id="auth-title" class="text-xl font-semibold mb-4 text-center text-gray-700">Welcome! Create an Account</h3>
+            <form onsubmit="handleAuth(event)" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium mb-1">Email Address</label>
+                    <input type="email" required placeholder="you@example.com" class="w-full border p-2.5 rounded focus:ring-2 focus:ring-blue-500 outline-none">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-1">Password</label>
+                    <input type="password" required placeholder="••••••••" class="w-full border p-2.5 rounded focus:ring-2 focus:ring-blue-500 outline-none">
+                </div>
+                <div id="country-field">
+                    <label class="block text-sm font-medium mb-1">Your Country</label>
+                    <select class="w-full border p-2.5 rounded focus:ring-2 focus:ring-blue-500 outline-none bg-white">
+                        <option value="ZA">South Africa 🇿🇦</option>
+                        <option value="US">United States 🇺🇸</option>
+                        <option value="UK">United Kingdom 🇬🇧</option>
+                        <option value="NG">Nigeria 🇳🇬</option>
+                        <option value="AU">Australia 🇦🇺</option>
+                        <option value="IN">India 🇮🇳</option>
+                    </select>
+                </div>
+                <button type="submit" id="auth-btn" class="w-full bg-blue-600 text-white py-2.5 rounded font-semibold hover:bg-blue-700 transition">Create Account</button>
+            </form>
+        </section>
+
+        <!-- SECTION 2: MARKETPLACE -->
+        <section id="marketplace-section" class="tab-content hidden space-y-6">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center border-b pb-4 gap-3">
+                <div>
+                    <h2 class="text-2xl font-bold text-gray-800">Community Marketplace</h2>
+                    <p class="text-gray-600 text-sm">Buy and sell verified local electronics safely.</p>
+                </div>
+                <button onclick="toggleForm('post-item-form')" class="bg-green-600 text-white px-4 py-2 rounded font-semibold hover:bg-green-700 transition">➕ List an Item for Sale</button>
+            </div>
+
+            <div id="post-item-form" class="hidden bg-white p-6 rounded-lg shadow-md max-w-xl mx-auto border-t-4 border-green-500">
+                <h3 class="text-lg font-bold mb-2 flex items-center text-gray-700">🛡️ Anti-Scam Verification (FICA Required)</h3>
+                <p class="text-xs text-gray-500 mb-4">To prevent fraud, you must supply identification to list items.</p>
+                <form onsubmit="handlePostListing(event)" class="space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold mb-1">ID or Passport Number</label>
+                            <input type="text" required placeholder="e.g. 950102XXXXXXX" class="w-full border p-2 text-sm rounded">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold mb-1">Upload ID Document</label>
+                            <input type="file" required class="w-full border p-1 text-sm rounded bg-gray-50">
+                        </div>
+                    </div>
+                    <hr>
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Appliance Category</label>
+                        <select id="item-category" class="w-full border p-2 rounded text-sm">
+                            <option value="Television">Television (TV)</option>
+                            <option value="Refrigerator">Refrigerator (Fridge)</option>
+                            <option value="Heater">Heater</option>
+                            <option value="Stove">Stove</option>
+                        </select>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Brand Name</label>
+                            <input type="text" id="item-brand" required placeholder="e.g. Samsung, Defy, LG" class="w-full border p-2 rounded text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Size / Dimension</label>
+                            <input type="text" id="item-size" required placeholder="e.g. 55-inch, Double Door" class="w-full border p-2 rounded text-sm">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Price (R / $)</label>
+                        <input type="number" id="item-price" required placeholder="Amount" class="w-full border p-2 rounded text-sm">
+                    </div>
+                    <div class="flex justify-end space-x-2">
+                        <button type="button" onclick="toggleForm('post-item-form')" class="px-4 py-2 border rounded text-sm hover:bg-gray-100">Cancel</button>
+                        <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded text-sm font-semibold hover:bg-green-700">Verify & Publish</button>
+                    </div>
+                </form>
+            </div>
+
+            <div id="listings-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="bg-white p-4 rounded-lg shadow border flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded font-semibold">Fridge</span>
+                            <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded font-semibold">✓ FICA Verified</span>
+                        </div>
+                        <h4 class="text-lg font-bold text-gray-900">Defy Double-Door Refrigerator</h4>
+                        <p class="text-sm text-gray-600">Size: Large Family Size (350 Litres)</p>
+                        <p class="text-xs text-gray-400 mt-1">Condition: Used - Perfect Working Order</p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t flex justify-between items-center">
+                        <span class="text-xl font-bold text-gray-900">R 3,200</span>
+                        <button onclick="alert('Contact unlocked! Safe meetups recommended.')" class="bg-blue-600 text-white text-xs px-3 py-2 rounded font-semibold hover:bg-blue-700">Buy Safely</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: DIY TUTORIALS -->
+        <section id="diy-section" class="tab-content hidden space-y-6">
+            <h2 class="text-2xl font-bold text-gray-800 border-b pb-4">Infinite DIY Repair Tutorials</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-white p-5 rounded-lg shadow border-l-4 border-blue-500">
+                    <h3 class="font-bold text-lg">📺 How to Fix a TV with No Picture</h3>
+                    <p class="text-sm text-gray-600 mt-2">Step 1: Check power cable. Step 2: Test backlight. Step 3: Replace T-Con board if needed. Video guide inside.</p>
+                    <button class="mt-3 text-sm text-blue-600 font-semibold hover:underline">Watch Tutorial →</button>
+                </div>
+                <div class="bg-white p-5 rounded-lg shadow border-l-4 border-blue-500">
+                    <h3 class="font-bold text-lg">❄️ Fridge Not Cooling?</h3>
+                    <p class="text-sm text-gray-600 mt-2">Clean condenser coils, check thermostat setting, test compressor relay. Save R800+ on technician fees.</p>
+                    <button class="mt-3 text-sm text-blue-600 font-semibold hover:underline">Watch Tutorial →</button>
+                </div>
+                <div class="bg-white p-5 rounded-lg shadow border-l-4 border-orange-500">
+                    <h3 class="font-bold text-lg">🔥 Heater Not Heating</h3>
+                    <p class="text-sm text-gray-600 mt-2">Common fix: thermal fuse replacement. Tools needed: screwdriver + multimeter. 15 min fix.</p>
+                    <button class="mt-3 text-sm text-blue-600 font-semibold hover:underline">Watch Tutorial →</button>
+                </div>
+                <div class="bg-white p-5 rounded-lg shadow border-l-4 border-red-500">
+                    <h3 class="font-bold text-lg">🍳 Electric Stove Plate Dead?</h3>
+                    <p class="text-sm text-gray-600 mt-2">Check continuity, replace infinite switch. Premium users get wiring diagrams.</p>
+                    <button class="mt-3 text-sm text-blue-600 font-semibold hover:underline">Watch Tutorial →</button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-white border-t p-4 text-center text-xs text-gray-500 mt-8">
+        © 2026 FixItGlobal & Market — Built for trusted communities worldwide.
+    </footer>
+
+<script>
+    function switchTab(tabId) {
+        document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+        document.getElementById(tabId).classList.remove('hidden');
+        window.scrollTo({top: 0, behavior: 'smooth'});
+    }
+
+    function toggleForm(id) {
+        document.getElementById(id).classList.toggle('hidden');
+    }
+
+    function toggleAuthMode(mode) {
+        const signupBtn = document.getElementById('signup-toggle');
+        const loginBtn = document.getElementById('login-toggle');
+        const title = document.getElementById('auth-title');
+        const btn = document.getElementById('auth-btn');
+        const countryField = document.getElementById('country-field');
+
+        if (mode === 'signup') {
+            signupBtn.className = 'text-lg font-bold text-blue-600 border-b-2 border-blue-600 pb-1';
+            loginBtn.className = 'text-lg font-bold text-gray-400 pb-1';
+            title.innerText = 'Welcome! Create an Account';
+            btn.innerText = 'Create Account';
+            countryField.classList.remove('hidden');
+        } else {
+            loginBtn.className = 'text-lg font-bold text-blue-600 border-b-2 border-blue-600 pb-1';
+            signupBtn.className = 'text-lg font-bold text-gray-400 pb-1';
+            title.innerText = 'Welcome Back! Log In';
+            btn.innerText = 'Log In';
+            countryField.classList.add('hidden');
+        }
+    }
+
+    function handleAuth(e) {
+        e.preventDefault();
+        const mode = document.getElementById('auth-btn').innerText;
+        alert(mode + ' successful! (Demo)');
+        switchTab('marketplace-section');
+    }
+
+    function handlePostListing(e) {
+        e.preventDefault();
+        const category = document.getElementById('item-category').value;
+        const brand = document.getElementById('item-brand').value;
+        const size = document.getElementById('item-size').value;
+        const price = document.getElementById('item-price').value;
+
+        const grid = document.getElementById('listings-grid');
+        const card = document.createElement('div');
+        card.className = 'bg-white p-4 rounded-lg shadow border flex flex-col justify-between animate-pulse';
+        card.innerHTML = `
+            <div>
+                <div class="flex justify-between items-start mb-2">
+                    <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded font-semibold">${category}</span>
+                    <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded font-semibold">✓ FICA Verified</span>
+                </div>
+                <h4 class="text-lg font-bold text-gray-900">${brand} ${category}</h4>
+                <p class="text-sm text-gray-600">Size: ${size}</p>
+                <p class="text-xs text-gray-400 mt-1">Just Listed - Verified Seller</p>
+            </div>
+            <div class="mt-4 pt-3 border-t flex justify-between items-center">
+                <span class="text-xl font-bold text-gray-900">R ${price}</span>
+                <button onclick="alert('Contact unlocked!')" class="bg-blue-600 text-white text-xs px-3 py-2 rounded font-semibold hover:bg-blue-700">Buy Safely</button>
+            </div>
+        `;
+        grid.prepend(card);
+        setTimeout(()=> card.classList.remove('animate-pulse'), 600);
+        e.target.reset();
+        toggleForm('post-item-form');
+        alert('Listing verified and published!');
+    }
+
+    // Default tab
+    switchTab('auth-section');
+</script>
+</body>
+</html>
